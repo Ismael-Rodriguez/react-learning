@@ -68,7 +68,7 @@ Un componente puede definir un estado propio y privado con `this.state`
 
 El componente se renderiza de nuevo al recibir nuevos props o cuando cambia su estado (mediante `this.setState()`)
 
-Todo componente se renderiza como una función de sus props y state, lo que convierte el renderizado de componentes react en algo deterministico. Eso hace que ante los mismos props y state siempre se renderice igual.
+Todo componente se renderiza como una función de sus props y state, lo que convierte el renderizado de componentes react en algo determinístico. Eso hace que ante los mismos props y state siempre se renderice igual.
 
 `this.state` es inmutable, o por lo menos debería ser tratado como tal, la razón de esto es que cuando llamamos a `this.setState` esta función es asincrona, por lo que si modificamos el estado podemos caer en condiciones de carrera al modificarlo nosotros y que luego se ejecute `this.setState`
 
@@ -136,3 +136,15 @@ EditableTimerList, we can consider it state. But when we see it elsewhere, it’
 state.
   - For simplicity, we want to strive to represent state with as few data points as possible.
 4. Si es un formulario controlado, también tiene estado.
+
+## Donde vive el estado
+
+For each piece of state:
+1. • Identify every component that renders something based on that state.
+2. • Find a common owner component (a single component above all the components
+that need the state in the hierarchy).
+3. • Either the common owner or another component higher up in the hierarchy
+should own the state.
+4. • If you can’t find a component where it makes sense to own the state, create a new
+component simply for holding the state and add it somewhere in the hierarchy
+above the common owner component.
