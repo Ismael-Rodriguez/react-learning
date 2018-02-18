@@ -1,3 +1,5 @@
+Revisar paquete, concurrently y babel-node y Webpack development proxy
+
 Varias formas de declarar un componente:
 
 ```javascript
@@ -8,7 +10,7 @@ class HelloWorld extends React.Component {
   }
 }
 
-import createReactClass from "create-react-class";
+import createReactClass from 'create-react-class';
 const HelloWorld = createReactClass({
   render() {
     return <p>Hello, world!</p>;
@@ -45,7 +47,7 @@ Hay que indicar donde se renderizará el componente:
 `ReactDOM.render([what], [where]);`
 
 ```javascript
-ReactDOM.render(<ProductList />, document.getElementById("content"));
+ReactDOM.render(<ProductList />, document.getElementById('content'));
 ```
 
 # Props
@@ -84,8 +86,8 @@ const MapComponent = createReactClass({
     lat: PropTypes.number,
     lng: PropTypes.number
     // ...
-  },
-})
+  }
+});
 ```
 
 ## defaultProps
@@ -96,7 +98,7 @@ class Counter extends React.Component {
     initialValue: 1
   };
   // ...
-};
+}
 ```
 
 ## Context
@@ -112,18 +114,18 @@ class Messages extends React.Component {
   static propTypes = {
     users: PropTypes.array.isRequired,
     initialActiveChatIdx: PropTypes.number,
-    messages: PropTypes.array.isRequired,
+    messages: PropTypes.array.isRequired
   };
   // necesario para usar context, se define el tipo del context
   static childContextTypes = {
     users: PropTypes.array,
-    userMap: PropTypes.object,
+    userMap: PropTypes.object
   };
   // necesario para usar context, se declara el valor del context
   getChildContext() {
     return {
       users: this.getUsers(),
-      userMap: this.getUserMap(),
+      userMap: this.getUserMap()
     };
   }
   // ...
@@ -131,15 +133,17 @@ class Messages extends React.Component {
 ```
 
 Para que los hijos reciban el context, debemos especificar con `contextTypes` el nombre y tipo del contexto (o parte de él que vaya a recibir)
+
 ```javascript
 class ThreadList extends React.Component {
   // ...
   static contextTypes = {
-    users: PropTypes.array,
+    users: PropTypes.array
   };
   // ...
 }
 ```
+
 Podremos acceder al contexto con `this.context`
 
 ---
@@ -151,7 +155,7 @@ class ProductList extends React.Component {
   render() {
     const productComponents = Seed.products.map(product => (
       <Product
-        key={"product-" + product.id}
+        key={'product-' + product.id}
         id={product.id}
         title={product.title}
       />
@@ -182,32 +186,38 @@ console.log(this.state.nums);
 
 > Cuando un cambio en el stte depende del state actual, es mejor usar una función para establecer el estado ya que ayuda a evitar errores de condiciones de carrera por la actualización asincrona del state.
 
-
 # Criterios para identificar lo que es estado
 
 1. Is it passed in from a parent via props? If so, it probably isn’t state.
-  - A lot of the data used in our child components are already listed in their parents. This criterion helps
-us de-duplicate.
-  - For example, “timer properties” is listed multiple times. When we see the properties declared in
-EditableTimerList, we can consider it state. But when we see it elsewhere, it’s not.
+
+* A lot of the data used in our child components are already listed in their parents. This criterion helps
+  us de-duplicate.
+* For example, “timer properties” is listed multiple times. When we see the properties declared in
+  EditableTimerList, we can consider it state. But when we see it elsewhere, it’s not.
+
 2. Does it change over time? If not, it probably isn’t state.
-  - This is a key criterion of stateful data: it changes.
+
+* This is a key criterion of stateful data: it changes.
+
 3. Can you compute it based on any other state or props in your component? If so, it’s not
-state.
-  - For simplicity, we want to strive to represent state with as few data points as possible.
+   state.
+
+* For simplicity, we want to strive to represent state with as few data points as possible.
+
 4. Si es un formulario controlado, también tiene estado.
 
 ## Donde vive el estado
 
 For each piece of state:
+
 1. • Identify every component that renders something based on that state.
 2. • Find a common owner component (a single component above all the components
-that need the state in the hierarchy).
+   that need the state in the hierarchy).
 3. • Either the common owner or another component higher up in the hierarchy
-should own the state.
+   should own the state.
 4. • If you can’t find a component where it makes sense to own the state, create a new
-component simply for holding the state and add it somewhere in the hierarchy
-above the common owner component.
+   component simply for holding the state and add it somewhere in the hierarchy
+   above the common owner component.
 
 # Children
 
@@ -215,12 +225,10 @@ above the common owner component.
 const Newspaper = props => {
   return (
     <Container>
-      <Article headline="An interesting Article">
-        Content Here
-      </Article>
+      <Article headline="An interesting Article">Content Here</Article>
     </Container>
-  )
-}
+  );
+};
 ```
 
 ```javascript
@@ -264,7 +272,6 @@ class MultiChildContainer extends React.Component {
 
 `const arr = React.Children.toArray(this.props.children);`
 
-
 # JSX
 
 ```javascript
@@ -289,9 +296,6 @@ React.createElement('div', {className: 'ui items'},
 </div>
 ```
 
-
-
-
 # Crear una funcionalidad React desde 0
 
 1. Break the app into components
@@ -302,17 +306,14 @@ React.createElement('div', {className: 'ui items'},
 6. Add inverse data flow
 7. Add server communication
 
-
-
-
 # React.createElement
 
 `var boldElement = React.createElement('b');`
 `var mountElement = document.querySelector('#root');`
 `ReactDOM.render(boldElement, mountElement);`
 
-
 React.createElement() function accepts three arguments:
+
 1. The DOM element type
 2. The element props
 3. The children of the element
@@ -320,6 +321,7 @@ React.createElement() function accepts three arguments:
 `var boldElement = React.createElement('b', null, "Text (as a string)");`
 
 The children of the DOM element must be a ReactNode object, which is any of the following:
+
 1. ReactElement
 2. A string or a number (a ReactText object)
 3. An array of ReactNodes
@@ -327,13 +329,14 @@ The children of the DOM element must be a ReactNode object, which is any of the 
 # React.render
 
 React render() acepta tres argumentos:
+
 1. El elemento que queremos renderizar
 2. El elemento donde queremos renderizarlo
 3. Un callback que se ejecutará después de que el componente se renderice/actalice
 
 ```javascript
 ReactDOM.render(boldElement, mountElement, function() {
-// The React app has been rendered/updated
+  // The React app has been rendered/updated
 });
 ```
 
@@ -358,17 +361,16 @@ const component = (<Alert
 ```javascript
 // ...
 const renderAdminMenu = function() {
-  return (<MenuLink to="/users">User accounts</MenuLink>)
-}
+  return <MenuLink to="/users">User accounts</MenuLink>;
+};
 // ...
 const userLevel = this.props.userLevel;
-  return (
-
-    <ul>
-      <li>Menu</li>
-      {userLevel === 'admin' && renderAdminMenu()}
-    </ul>
-  )
+return (
+  <ul>
+    <li>Menu</li>
+    {userLevel === 'admin' && renderAdminMenu()}
+  </ul>
+);
 ```
 
 `const Menu = (<ul>{loggedInUser ? <UserMenu /> : <LoginLink />}</ul>)`
@@ -400,7 +402,6 @@ const props = {msg: "Hello", recipient: "World"}
 ```javascript
 <!-- Same as <div class='box'></div> -->
 <div className='box'></div>
-
 ```
 
 ## htmlFor en vez de for
@@ -421,20 +422,20 @@ return (
     <li>phone: {'\u0260e'}</li>
     <li>star: {'\u2606'}</li>
   </ul>
-)
+);
 ```
 
 ## Emoji
 
 ```javascript
 // Emoji are just unicode character sequences, so we can add emoji the same way:
-return(
+return (
   <ul>
     <li>dolphin: {'\uD83D\uDC2C'}</li>
     <li>dolphin: {'\uD83D\uDC2C'}</li>
     <li>dolphin: {'\uD83D\uDC2C'}</li>
   </ul>
-)
+);
 ```
 
 # Ciclo de vida
@@ -447,6 +448,17 @@ Se invoca despues de que el componente sea montado en la pagina
 
 * Es un buen sitio para inicializar su estado.
 
+## componentWillReceiveProps(update)
+
+Se invoca cuando el componente va a recibir nuevos props.
+
+```javascript
+componentWillReceiveProps(update) {
+  this.setState({ value: update.value });
+}
+```
+
+## Context
 
 En caso de que tenga el componente tenga "context", el ciclo de vida incluye el
 contexto como argumento en cada función
@@ -472,5 +484,189 @@ componentWillUpdate(nextProps, nextState, nextContext) {
 // ...
 componentDidUpdate(prevProps, prevState, prevContext) {
   // ...
+}
+```
+
+# Eventos
+
+Cuando capturamos un evento de un click de un boton, el movimiento del raton o cualquier otra cosa, lo que obtenemos no es un evento DOM normal, es un "syntheticEvent", que no es otra cosa que un evento normalizado cross-browser.
+
+De todas formas, si queremos obtener el evento DOM real, podemos hacerlo con `syntheticEvent.nativeEvent`
+
+Mas info: https://reactjs.org/docs/events.html
+
+Podemos acceder al elemento que ha generado el evento con `const ele = evt.target;`
+
+# Refs
+
+Si ponemos un atributo `ref='XXX'` en un elemento, podremos acceder a ese elemento con `this.refs.XXX`
+
+```javascript
+onFormSubmit = (evt) => {
+  // se usa para evitar el submit del formulario
+  evt.preventDefault();
+  console.log(this.refs.name.value);
+};
+
+render() {
+  return (
+    <div>
+      <h1>Sign Up Sheet</h1>
+
+      <form onSubmit={this.onFormSubmit}>
+        <input
+          placeholder='Name'
+          ref='name'
+        />
+
+        <input type='submit' />
+      </form>
+    </div>
+  );
+}
+```
+
+# Redux
+
+1. Pensar en la forma del estado.
+2. Intentar centralizar el estado lo maximo posible.
+
+Ejemplo de definición de actions
+
+```javascript
+/* eslint-disable no-use-before-define */
+export const FETCH_PEOPLE_REQUEST = 'FETCH_PEOPLE_REQUEST';
+function fetchPeopleRequest () {
+  return {type: FETCH_PEOPLE_REQUEST};
+}
+
+export const FETCH_PEOPLE_SUCCESS = 'FETCH_PEOPLE_SUCCESS';
+function fetchPeopleSuccess (people) {
+   return {type: FETCH_PEOPLE_SUCCESS, people};
+}
+
+// ejemplo de acción asincrona, haciendo uso de Redux Thunk
+export function fetchPeople () {
+  // observamos que esta funcion recibe como argumento la función dispatch que
+  // nos permite despachar acciones
+  return function (dispatch) {
+    dispatch(fetchPeopleRequest())
+    apiClient.loadPeople().then((people) => {
+      dispatch(fetchPeopleSuccess(people))
+    })
+  }
+}
+```
+
+Ejemplo de reducer
+
+```javascript
+const initialState = {
+  people: [],
+  isLoading: false,
+  saveStatus: 'READY',
+  person: {
+    name: '',
+    email: '',
+    course: null,
+    department: null
+  }
+};
+
+export function reducer(state = initialState, action) {
+  switch (action.type) {
+    case FETCH_PEOPLE_REQUEST:
+      return Object.assign({}, state, {
+        isLoading: true
+      });
+    case FETCH_PEOPLE_SUCCESS:
+      return Object.assign({}, state, {
+        people: action.people,
+        isLoading: false
+      });
+
+    case SAVE_PEOPLE_REQUEST:
+      return Object.assign({}, state, {
+        saveStatus: 'SAVING'
+      });
+    case SAVE_PEOPLE_FAILURE:
+      return Object.assign({}, state, {
+        saveStatus: 'ERROR'
+      });
+    case SAVE_PEOPLE_SUCCESS:
+      return Object.assign({}, state, {
+        people: action.people,
+        person: {
+          name: '',
+          email: '',
+          course: null,
+          department: null
+        },
+        saveStatus: 'SUCCESS'
+      });
+    default:
+      return state;
+  }
+}
+```
+
+El componente sigue teniendo state, lo que pasa es que ahora lo recibe mediante props. Por eso, cuando recibimos nuevos props debemos actualizar el estado del componente.
+
+```javascript
+componentWillReceiveProps(update) {
+  console.log('this.props.fields', this.props.fields, update);
+  this.setState({ fields: update.fields });
+}
+```
+
+Ejemplo de crear un store y aplicar un middleware
+
+```javascript
+const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+```
+
+Usando Redux, podemos usar react-redux para conectar Redux al componente, debemos definir dos funciones, `mapStateToProps` que define el 'mapeado' entre el store y los props que recibe el componente.
+
+```javascript
+function mapStateToProps(state) {
+  return {
+    isLoading: state.isLoading,
+    fields: state.person,
+    people: state.people,
+    saveStatus: state.saveStatus,
+  };
+}
+```
+
+`mapDispatchToProps` hace que el componente reciba props que son 'actions creators', observamos que los props conectados con el store de `mapStateToProps` no aparece `onSubmit`
+
+El componente finalmente recibirá como props el conjunto definido en `mapDispatchToProps` y `mapStateToProps`
+
+```javascript
+function mapDispatchToProps(dispatch) {
+  return {
+    onSubmit: (people) => {
+      dispatch(savePeople(people));
+    },
+  };
+}
+```
+
+Finalmente hay que conectar Redux con el Componente
+
+```javascript
+const ReduxForm = connect(mapStateToProps, mapDispatchToProps)(Form);
+```
+
+Finalmente podemos usamos `Provider` que viene con react-redux, `Provider` es un componente que permite a sus hijos tener acceso al store.
+**Esto no es la practica recomendad** , con connect ya tenemos nuestro componente contectado a Redux y mediante props deberiamos tener todo lo necesario para que funcione correctamente. `Provider` es un atajo que da acceso directo al store, y no debería usarse sin un motivo concreto.
+
+```javascript
+render() {
+  return (
+    <Provider store={store}>
+      <ReduxForm />
+    </Provider>
+  );
 }
 ```
