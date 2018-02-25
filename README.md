@@ -670,3 +670,101 @@ render() {
   );
 }
 ```
+
+# Routing
+
+Con React Router tenemos:
+
+- Componentes que modifican la url:
+  - Link
+    - Crea un link cuyo evento onClick esta preventDefault y lo que hace es cambiar la url.
+    - href: When a user clicks a traditional <a> tag, the browser uses href to determine the next location to visit. As we’re changing the location manually in our onClick handler, the href isn’t strictly necessary. However, we should always set it anyway. It enables a user to hover over our links and see where they lead or open up links in new tabs
+    - Cambiar la url no es suficiente, necesitamos informar a alguien que la URL ha cambiado, en este ejemplo se usa el paquete `history` de npm (React-router lo hace internamente)
+
+    ````javascript
+    componentDidMount() {
+      history.listen(() => this.forceUpdate());
+    }
+    ```
+
+  - Redirect
+    - Cambia la ruta cuando se renderiza
+    - Sirve por ejemplo para redireccionar dinamicamente, para ello y segun la condicion habrá que renderizar un componente Redirect.
+- Qué se renderiza en cada ruta:
+  - Route
+    - Se trata de un componente que recibe como prop la url (o patron) y el componente, si la url del navegador coincide con la recibida, renderiza el componente.
+  - Switch
+    - Switch contiene varios componentes Router, solo renderiza el primero que corresponda con la ruta del navegador.
+
+Componente contenedor Router
+  - Como se ha visto en el componente Link, hay que re-renderizar el componente cuando la url cambia, este componente contenedor se encarga de eso.
+  - También pasa a los componentes hijos un contexto, compuesto por el objeto history y la url actual del navegador.
+
+**React-Router**
+
+```javascript
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  Switch
+} from 'react-router-dom';
+```
+
+* Route acepta como hemos visto un patron para la ruta y un componente, pero también acepta un atributo render que acepta una función que devuelva jsx
+
+```javascript
+<Route path='/atlantic/ocean' render={() => (
+  <div>
+    <h3>Atlantic Ocean — Again!</h3>
+      <p>
+        Also known as "The Pond."
+        </p>
+  </div>
+)} />
+<Route path='/atlantic' component={Atlantic} />
+<Route path='/pacific' component={Pacific} />
+<Route path='/black-sea' component={BlackSea} />
+```
+
+* Tambien podemos especificar que el atributo path sea exacto con el atributo "exact"
+
+```javascript
+<Route exact={true} path='/' render={() => (
+  // ...
+)}
+```
+
+Ejemplo con switch
+
+```javascript
+<Switch>
+  <Route path='/atlantic/ocean' render={() => (
+    <div>
+      <h3>Atlantic Ocean — Again!</h3>
+      <p>
+        Also known as "The Pond."
+      </p>
+    </div>
+  )} />
+  <Route path='/atlantic' component={Atlantic} />
+  <Route path='/pacific' component={Pacific} />
+  <Route path='/black-sea' component={BlackSea} />
+
+  <Route exact path='/' render={() => (
+    <h3>
+      Welcome! Select a body of saline water above.
+    </h3>
+  )} />
+
+  <Route render={({ location }) => (
+    <div className='ui inverted red segment'>
+      <h3>
+        Error! No matches for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  )} />
+</Switch>
+```
