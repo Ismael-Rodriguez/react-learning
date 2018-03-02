@@ -184,7 +184,7 @@ console.log(this.state.nums);
 // [ 1, 2, 3, 4] <-- Uh-oh!
 ```
 
-> Cuando un cambio en el stte depende del state actual, es mejor usar una función para establecer el estado ya que ayuda a evitar errores de condiciones de carrera por la actualización asincrona del state.
+> Cuando un cambio en el state depende del state actual, es mejor usar una función para establecer el estado ya que ayuda a evitar errores de condiciones de carrera por la actualización asincrona del state.
 
 # Criterios para identificar lo que es estado
 
